@@ -1,0 +1,26 @@
+{
+  "NODES": [
+    { "name": "c1", "ip": "10.0.0.10", "dimage": "test-emu", "interface": "if1", "type": "client" },
+    { "name": "c2", "ip": "10.0.0.11", "dimage": "test-emu", "interface": "if2", "type": "client" },
+    { "name": "c3", "ip": "10.0.0.12", "dimage": "test-emu", "interface": "if3", "type": "client" },
+    { "name": "c4", "ip": "10.0.0.13", "dimage": "test-emu", "interface": "if4", "type": "client" },
+    { "name": "c5", "ip": "10.0.0.14", "dimage": "test-emu", "interface": "if5", "type": "client" },
+    { "name": "c6", "ip": "10.0.0.15", "dimage": "test-emu", "interface": "if6", "type": "client" },
+    { "name": "c7", "ip": "10.0.0.16", "dimage": "test-emu", "interface": "if7", "type": "client" },
+    { "name": "c8", "ip": "10.0.0.17", "dimage": "test-emu", "interface": "if8", "type": "client" },
+    { "name": "serv1", "ip": "10.0.0.26", "dimage": "renanalves/server-testbed:configured", "interface": "ifserv1", "type": "server" }
+  ],
+  "SWITCHES": [ "s1", "s2"],
+  "LINKS": [
+    { "from": "if1", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if2", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if3", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if4", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if5", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if6", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if7", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "if8", "to": "s1", "delay": "100ms", "bw": 1 },
+    { "from": "s1", "to": "s2", "delay": "100ms", "bw": 5 },
+    { "from": "ifserv1", "to": "s2", "delay": "100ms", "bw": 10 }
+  ]
+}
