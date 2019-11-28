@@ -23,6 +23,6 @@ EXPOSE 5555/tcp
 
 EXPOSE 5902/tcp
 
-RUN echo "no" | avdmanager create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-22;google_apis;x86_64'
+RUN echo "no" | avdmanager create avd --force --name android-22 --abi google_apis/x86_64 --package 'system-images;android-22;google_apis;x86_64'
 
 CMD /root/port_forward.sh 

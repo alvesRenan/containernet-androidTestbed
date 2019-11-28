@@ -2,3 +2,6 @@
 __pycache__/
 tests/
 source-afis.apk
+run_teste_adriano.py
+teste_adriano.json
+create_teste_adriano.py

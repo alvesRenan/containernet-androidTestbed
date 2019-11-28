@@ -1,3 +1,6 @@
+import shlex as sh
+import subprocess as sp
+
 import docker
 
 from mininet.cli import CLI
@@ -19,13 +22,18 @@ class ScenarioCreator:
     self.types = {}
 
   def create_scenario(self, scenario_info):
-    for node in scenario_info.get( 'NODES' ):
+    "Creates a empty list if the field does not exist"
+    nodes = scenario_info.get( 'NODES', [] )
+    switches = scenario_info.get( 'SWITCHES', [] )
+    links = scenario_info.get( 'LINKS', [] )
+
+    for node in nodes:
       self.create_docker_node( node )
 
-    for switch in scenario_info.get( 'SWITCHES' ):
+    for switch in switches:
       self.create_switch( switch )
 
-    for link in scenario_info.get( 'LINKS' ):
+    for link in links:
       self.add_link( link )
 
   def create_docker_node(self, node):
@@ -75,10 +83,12 @@ class ScenarioCreator:
         node.cmd("sh -c '/home/exec.sh' & ")
       else:
         node.cmd("sh -c '/root/port_forward.sh' & ")
-        node.cmd("sh -c 'emulator @testAVD -memory 512 -partition-size 512 -no-boot-anim -accel auto -no-window -camera-back none -camera-front none -nojni -no-cache -no-audio' & ")
+        node.cmd("sh -c 'emulator @android-22 -memory 512 -partition-size 512 -no-boot-anim -accel auto -no-window -camera-back none -camera-front none -nojni -no-cache -no-audio -qemu -vnc :2' & ")
 
     self.net.start()
     CLI(self.net)
   
   def stop_scenario(self):
     self.net.stop()
+
+    sp.call( sh.split('mn -c') )

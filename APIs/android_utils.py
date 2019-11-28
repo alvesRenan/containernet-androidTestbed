@@ -17,7 +17,7 @@ class Android:
       return sp.getoutput( sh.split(cmd) )
     
     if pipe:
-      ps = sp.Popen( cmd, shell=True, stdout=sp.PIPE, stderr=sp.STDOUT)
+      ps = sp.Popen( cmd, shell=True, stdout=sp.PIPE, stderr=sp.STDOUT )
       return ps.communicate()[0]
 
     else:
@@ -29,8 +29,8 @@ class Android:
       self.adb_name, activity) )
 
     "Define the IP of MpOS Server"
-    self.exec_cmd( "adb -s %s shell am start -n %s --es 'cloudlet' '%s' > /dev/null" % (
-      self.adb_name, activity, cloudlet_ip) )
+    #self.exec_cmd( "adb -s %s shell am start -n %s --es 'cloudlet' '%s' > /dev/null" % (
+     # self.adb_name, activity, cloudlet_ip) )
   
   def run(self, broadcast_signal, arguments, num_repetitions, random_time):
     """If random_time, then the device will wait between 1 and 5 seconds
