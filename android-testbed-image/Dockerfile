@@ -25,4 +25,7 @@ EXPOSE 5902/tcp
 
 RUN echo "no" | avdmanager create avd --force --name android-22 --abi google_apis/x86_64 --package 'system-images;android-22;google_apis;x86_64'
 
+RUN rm /opt/android-sdk-linux/platform-tools/adb
+
 CMD /root/port_forward.sh 
+#CMD /bin/bash
