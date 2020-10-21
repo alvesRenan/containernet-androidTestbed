@@ -3,16 +3,16 @@ import subprocess as sp
 
 import docker
 
-from APIs.android_utils import Android
+from android_controller.android_utils import Android
 
 
-class ContainernetDeviceManager:
+class DeviceController:
 
   def __init__(self, cloudlet_ip, out_dir):
     """
       Args:
-        cloudlet_ip: IP of the container running the MpOS server
-        out_dir: directory where the log files will be dumped
+        cloudlet_ip (str): IP of the container running the MpOS server
+        out_dir (str): directory where the log files will be dumped
     """
     self.cloudlet_ip = cloudlet_ip
     self.containers = []
@@ -65,10 +65,10 @@ class ContainernetDeviceManager:
   
   def get_devices(self):
     """
-      For each client container creates an object of the Android class
+      Creates an object of the Android class for each client container 
 
       Returns:
-        List of Android objects
+        list of Android objects
     """
 
     devices = []
@@ -85,8 +85,8 @@ class ContainernetDeviceManager:
       Install an app in an emulator
 
       Args:
-        adb_name: name representation of the emulator on the adb list
-        path_to_app: path or name, with in the same folder, of the app
+        adb_name (str): name representation of the emulator on the adb list
+        path_to_app (str): path to the APK file
     """
 
     cmd = "adb -s %s install -r -t %s" % (adb_name, path_to_app)
@@ -98,8 +98,8 @@ class ContainernetDeviceManager:
       Calls the start_app method of a given Android object
 
       Args:
-        android_obj: Android class object
-        activity: Name of the app activity to be called
+        android_obj (Android): Android class object
+        activity (str): Name of the app activity to be called
 
       Output:
         Prints the name of the container where the app was started
@@ -113,10 +113,13 @@ class ContainernetDeviceManager:
       Starts a Thread for the Android object and keep sending the broadcast_signal until num_repetitions is hit
 
       Args:
-        android_obj: Android class object
-        broadcast_signal: A flag that will trigger a broadcast receiver in the app to start the activity that should be executed
-        arguments: Arguments to be passed to the activity via Intent
-        num_repetitions: Number of times the activity will be execcuted
-        random_time: Defines if the emulators will wait a random time before starting the activity
+        android_obj (Android): Android class object
+        broadcast_signal (str): A flag that will trigger a broadcast receiver 
+                                in the app to start the activity that should 
+                                be executed
+        arguments (str): Arguments to be passed to the activity via Intent
+        num_repetitions (int): Number of times the activity will be execcuted
+        random_time (bool): Defines if the emulators will wait a random time 
+                            before starting the activity
     """
     android_obj.run(broadcast_signal, arguments, num_repetitions, random_time)
