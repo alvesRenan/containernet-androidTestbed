@@ -14,7 +14,7 @@ devices = ctrl.get_devices()
 
 """Install the app on each device"""
 for android_device in devices:
-  ctrl.install_app(android_device.adb_name, 'MatrixOperationsKotlin.apk')
+  ctrl.install_app(android_device.adb_name, 'sample_app.apk')
 
 """Starts the app in each emulator"""
 for android_device in devices:
