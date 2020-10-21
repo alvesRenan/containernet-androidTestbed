@@ -4,7 +4,7 @@ import subprocess as sp
 import docker
 
 from mininet.cli import CLI
-from mininet.log import setLogLevel
+from mininet.log import setLogLevel, info
 from mininet.net import Containernet
 from mininet.link import TCLink
 from mininet.node import Controller
@@ -22,7 +22,7 @@ class ScenarioCreator:
     self.types = {}
 
   def create_scenario(self, scenario_info):
-    "Creates a empty list if the field does not exist"
+    """Creates a empty list if the field does not exist"""
     nodes = scenario_info.get( 'NODES', [] )
     switches = scenario_info.get( 'SWITCHES', [] )
     links = scenario_info.get( 'LINKS', [] )
@@ -31,10 +31,12 @@ class ScenarioCreator:
       self.create_docker_node( node )
 
     for switch in switches:
-      self.create_switch( switch )
+      self.nodes[switch] = self.net.addSwitch( switch )
 
     for link in links:
       self.add_link( link )
+    
+    info(self.nodes)
 
   def create_docker_node(self, node):
     """
@@ -55,19 +57,16 @@ class ScenarioCreator:
 
     self.container_to_interface( node.get('name'), node.get('interface') )
 
-  def container_to_interface(self, c_name, i_name):
+  def container_to_interface(self, node, interface):
     """
       Creates a link between a docker node and a interface
 
       Args:
-        c_name: key to the container obj in the self.nodes dict
-        i_name: key to the interface obj in the self.interfaces dict
+        node (str): key to the container obj in the self.nodes dict
+        interface (str): key to the interface obj in the self.interfaces dict
     """
 
-    self.net.addLink( self.nodes.get(c_name), self.nodes.get(i_name) )
-
-  def create_switch(self, switch_name):
-    self.nodes[switch_name] = self.net.addSwitch( switch_name )
+    self.net.addLink( self.nodes.get(node), self.nodes.get(interface ) )
   
   def add_link(self, link):
     """Key to the objects in the nodes dict"""
@@ -80,7 +79,7 @@ class ScenarioCreator:
     for key, node in self.nodes.items():
       
       if self.types.get( key ) == "server":
-        node.cmd("sh -c '/home/exec.sh' & ")
+        node.cmd("sh -c 'java -jar mposplatform.jar' & ")
       else:
         node.cmd("sh -c '/root/port_forward.sh' & ")
         node.cmd("sh -c 'emulator @android-22 -memory 512 -partition-size 512 -no-boot-anim -accel auto -no-window -camera-back none -camera-front none -nojni -no-cache -no-audio -qemu -vnc :2' & ")
