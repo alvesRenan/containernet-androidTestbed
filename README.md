@@ -6,7 +6,7 @@ Integrating [androidTestBed](https://github.com/alvesRenan/androidTestBed) with 
 
 ```bash
 # build the image
-$ docker build -t renanalves/testbed-containernet
+$ docker build -t renanalves/testbed-containernet .
 
 # or pull the pre-build image 
 $ docker pull renanalves/testbed-containernet
