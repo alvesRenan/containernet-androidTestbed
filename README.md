@@ -26,7 +26,7 @@ python3 examples/android_testbed_example.py
 
 Example scenario topology:
 
-### c1 <---> s1 <---> s2 <---> serv1
+**c1 <---> s1 <---> s2 <---> serv1**
 
 where:
 - c1: client container running Android emulator
