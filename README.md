@@ -21,7 +21,7 @@ $ docker run --name testbed-containernet -it --rm --privileged --pid='host' -v /
 ## Examples
 Run the testbed example:
 ```bash
-python3 examples/android_testbed_example.py
+python3 examples/android_testbed.py /containernet/examples/scenario_example.json
 ```
 
 Example scenario topology:

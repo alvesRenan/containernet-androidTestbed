@@ -3,6 +3,7 @@ from time import sleep
 
 from android_controller.device_controller import DeviceController
 
+
 """Pass server IP and output directory"""
 ctrl = DeviceController('10.0.0.12', 'out_dir')
 
