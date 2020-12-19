@@ -4,7 +4,7 @@ import json
 from testbed.scnerio_creator import ScenarioCreator
 
 
-if len( sys.argv ) != 1:
+if len( sys.argv ) != 2:
   print('Usage: python3 android_testbed.py /path/to/json_file')
   sys.exit(1)
 
