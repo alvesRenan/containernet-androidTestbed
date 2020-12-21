@@ -1,8 +1,6 @@
 import shlex as sh
 import subprocess as sp
 
-import docker
-
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from mininet.net import Containernet
