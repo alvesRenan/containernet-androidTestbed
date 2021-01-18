@@ -1,10 +1,13 @@
 import logging as log
 
+from app import docker_ctrl
 from flask import request
 from flask_restful import Resource
+from testbed.scnerio_creator import ScenarioCreator
 
-from app import docker_ctrl
+from utils import *
 
+sc = ScenarioCreator()
 
 class HandleCreation(Resource):
 
@@ -12,18 +15,16 @@ class HandleCreation(Resource):
     log.debug('Received POST request')
     
     args = request.get_json()
-    return args,200
+
+    try:
+      sc.create_scenario( args )
+      
+      send_res( 200, 'Scenario created.' )
+    except:
+      send_res( 400, 'Error creating scenario.' )
 
 
 class GetStatus(Resource):
 
   def get(self):
-    try:
-      cntr = docker_ctrl.containers.get('testbed-containernet')
-
-      if cntr.status == 'running':
-        return {'status': 'running'}
-    except:
-      pass
-    
-    return {'status': 'not running'}
+    send_res( 200, 'Running.' )

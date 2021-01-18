@@ -6,4 +6,4 @@ from .tasks import *
 restful_service = Api( appInstance )
 
 restful_service.add_resource(GetStatus, '/status')
-restful_service.add_resource(HandleCreation, "/create")
+restful_service.add_resource(HandleCreation, '/create')
