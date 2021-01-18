@@ -20,5 +20,7 @@ COPY api /containernet/api
 COPY create_scenario_example.py /containernet/examples/android_testbed.py
 COPY scenario_example.json /containernet/examples/scenario_example.json
 
+EXPOSE 5000
+
 ENTRYPOINT ["util/docker/entrypoint.sh"]
 CMD ["python3", "/containernet/app.py"]

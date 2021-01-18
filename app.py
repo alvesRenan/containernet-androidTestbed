@@ -4,7 +4,6 @@ from flask import Flask
 
 log.basicConfig(level="DEBUG")
 
-docker_ctrl = docker.from_env()
 appInstance = Flask( __name__ )
 
 
