@@ -7,19 +7,20 @@ from mininet.net import Containernet
 from mininet.link import TCLink
 from mininet.node import Controller
 
+from resources.utils import *
+
 
 class ScenarioCreator:
 
   def __init__(self):
     setLogLevel('info')
 
-    self.net = Containernet(controller=Controller)
-    self.net.addController('c0')
-
     self.nodes = {}
     self.types = {}
 
   def create_scenario(self, scenario_info):
+    self.add_controller()
+    
     """Creates a empty list if the field does not exist"""
     nodes = scenario_info.get( 'NODES', [] )
     switches = scenario_info.get( 'SWITCHES', [] )
@@ -35,6 +36,10 @@ class ScenarioCreator:
       self.add_link( link )
     
     info(self.nodes)
+  
+  def add_controller(self):
+    self.net = Containernet(controller=Controller)
+    self.net.addController('c0')
 
   def create_docker_node(self, node):
     """
@@ -77,10 +82,10 @@ class ScenarioCreator:
     for key, node in self.nodes.items():
       
       if self.types.get( key ) == "server":
-        node.cmd("sh -c 'java -jar mposplatform.jar' & ")
+        node.cmd( MPOS_START )
       else:
-        node.cmd("sh -c '/root/port_forward.sh' & ")
-        node.cmd("sh -c 'emulator @android-22 -memory 512 -partition-size 512 -no-boot-anim -accel auto -no-window -camera-back none -camera-front none -nojni -no-cache -no-audio -qemu -vnc :2' & ")
+        node.cmd( FORWARD_PORTS )
+        node.cmd( ANDROID_EMU_START )
 
     self.net.start()
     CLI(self.net)
