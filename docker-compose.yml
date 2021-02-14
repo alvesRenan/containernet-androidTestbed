@@ -1,0 +1,26 @@
+version: '3.5'
+
+networks:
+  testbed:
+    driver: 'bridge'
+
+services:
+  ### containernet-testbed #########################
+  testbed:
+    build: ./
+    pid: 'host'
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '5000:5000'
+    networks: 
+      - testbed
+    depends_on:
+      - mongodb
+
+  ### MongoDB ######################################
+  mongodb:
+    image: mongo
+    networks: 
+      - testbed
