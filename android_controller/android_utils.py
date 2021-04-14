@@ -22,14 +22,15 @@ class Android:
 
     sp.call( sh.split(cmd) )
 
-  def start_app(self, activity, cloudlet_ip):
+  def start_app(self, activity):
     """Starts App"""
     self.exec_cmd( 'adb -s %s shell am start -S %s > /dev/null' % (
       self.adb_name, activity) )
 
-    """Define the IP of MpOS Server"""
-    self.exec_cmd( "adb -s %s shell am start -n %s --es 'cloudlet' '%s' > /dev/null" % (
-     self.adb_name, activity, cloudlet_ip) )
+  def run_activity(self, activity, args=''):
+    """Opens new activity"""
+    self.exec_cmd( "adb -s %s shell am start -n %s '%s' > /dev/null" % (
+      self.adb_name, activity, args) )
   
   def run(self, broadcast_signal, arguments, num_repetitions, random_time):
     """If random_time, then the device will wait between 1 and 5 seconds

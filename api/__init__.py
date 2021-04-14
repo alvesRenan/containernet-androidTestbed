@@ -5,6 +5,12 @@ from .tasks import *
 
 restful_service = Api( appInstance )
 
-restful_service.add_resource(GetStatus, '/status')
-restful_service.add_resource(HandleCreation, '/create')
-restful_service.add_resource(SaveScenario, '/save')
+routes = [
+  { 'resource': GetStatus, 'path': '/status' },
+  { 'resource': HandleCreation, 'path': '/create' },
+  { 'resource': SaveScenario, 'path': '/save' },
+  { 'resource': ExecTest, 'path': '/exec' }
+]
+
+for route in routes:
+  restful_service.add_resource( route['resource'], route['path'] )

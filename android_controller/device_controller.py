@@ -1,3 +1,4 @@
+from os import stat
 import shlex as sh
 import subprocess as sp
 
@@ -8,18 +9,16 @@ from android_controller.android_utils import Android
 
 class DeviceController:
 
-  def __init__(self, cloudlet_ip, out_dir):
+  def __init__(self, out_dir=None):
     """
       Args:
-        cloudlet_ip (str): IP of the container running the MpOS server
         out_dir (str): directory where the log files will be dumped
     """
-    self.cloudlet_ip = cloudlet_ip
     self.containers = []
     self.out_dir = out_dir
 
     "Create out_dir"
-    sp.call(['mkdir', self.out_dir])
+    if out_dir is not None: sp.call( ['mkdir', self.out_dir] )
 
   def connect_to_devices(self):
     """
@@ -93,7 +92,8 @@ class DeviceController:
 
     sp.call( sh.split(cmd) )
   
-  def start_app(self, android_obj, activity):
+  @staticmethod
+  def start_app(android_obj, activity):
     """
       Calls the start_app method of a given Android object
 
@@ -105,10 +105,26 @@ class DeviceController:
         Prints the name of the container where the app was started
     """
 
-    android_obj.start_app(activity, self.cloudlet_ip)
+    android_obj.start_app (activity )
+    print( "Stated activity %s on device %s" % (activity, android_obj.container_name) )
+  
+  @staticmethod
+  def exec_activity(android_obj, activity, extras):
+    """
+      Executes a new activity without closing a existing one
+
+      Args:
+        android_obj (Android): Android class object
+        activity (str): Name of the app activity to be called
+
+      Output:
+        Prints the name of the container where the app was started
+    """
+    android_obj.run_activity( activity, extras )
     print( "Stated activity %s on device %s" % (activity, android_obj.container_name) )
 
-  def exec_activity(self, android_obj, broadcast_signal, arguments, num_repetitions, random_time=False):
+  @staticmethod
+  def start_test(android_obj, broadcast_signal, arguments, num_repetitions, random_time=False):
     """
       Starts a Thread for the Android object and keep sending the broadcast_signal until num_repetitions is hit
 

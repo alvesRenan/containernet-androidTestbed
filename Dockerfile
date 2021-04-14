@@ -1,7 +1,7 @@
 FROM containernet/containernet
 LABEL maintainer="renan.alves@alu.ufc.br"
 
-RUN pip3 install flask-restful==0.3.8
+RUN pip3 install flask-restful==0.3.8 pymongo
 
 RUN apt-get update && \
   apt-get install -y adb
