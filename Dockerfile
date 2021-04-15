@@ -17,6 +17,7 @@ COPY app.py /containernet/app.py
 COPY api /containernet/api
 COPY testbed /containernet/testbed
 COPY resources /containernet/resources
+COPY android_controller /containernet/android_controller
 
 COPY create_scenario_example.py /containernet/examples/android_testbed.py
 COPY scenario_example.json /containernet/examples/scenario_example.json
