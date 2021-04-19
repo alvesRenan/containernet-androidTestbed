@@ -1,4 +1,4 @@
-FROM containernet/containernet
+FROM renanalves/containernet-androidtestbed
 LABEL maintainer="renan.alves@alu.ufc.br"
 
 RUN pip3 install flask-restful==0.3.8 pymongo
