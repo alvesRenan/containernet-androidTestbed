@@ -1,8 +1,6 @@
-import shlex as sh
-import subprocess as sp
 from threading import Thread
 from time import sleep
-
+from resources.utils import exec_cmd
 
 class Android:
 
@@ -11,25 +9,14 @@ class Android:
     self.adb_name = adb_name
     self.out_dir = out_dir
   
-  @staticmethod
-  def exec_cmd(cmd, output=False, pipe=False):
-    if output:
-      return sp.getoutput( sh.split(cmd) )
-    
-    if pipe:
-      ps = sp.Popen( cmd, shell=True, stdout=sp.PIPE, stderr=sp.STDOUT )
-      return ps.communicate()[0]
-
-    sp.call( sh.split(cmd) )
-
   def start_app(self, activity):
     """Starts App"""
-    self.exec_cmd( 'adb -s %s shell am start -S %s > /dev/null' % (
+    exec_cmd( 'adb -s %s shell am start -S %s > /dev/null' % (
       self.adb_name, activity) )
 
   def run_activity(self, activity, args=''):
     """Opens new activity"""
-    self.exec_cmd( "adb -s %s shell am start -n %s '%s' > /dev/null" % (
+    exec_cmd( "adb -s %s shell am start -n %s '%s' > /dev/null" % (
       self.adb_name, activity, args) )
   
   def run(self, broadcast_signal, arguments, num_repetitions, random_time):
@@ -44,7 +31,7 @@ class Android:
 
   def exec_run(self, broadcast_signal, arguments, num_repetitions):
     """Clears the logcat"""
-    self.exec_cmd( "adb -s %s shell logcat -c" % self.adb_name )
+    exec_cmd( "adb -s %s shell logcat -c" % self.adb_name )
 
     current_interation = 1
     """Cicle of repetitions"""
@@ -52,7 +39,7 @@ class Android:
       print( 'Interaction %i of device %s' % (current_interation, self.container_name) )
 
       """Send the broadcast_signal to start the activity"""
-      self.exec_cmd( 'adb -s %s shell am broadcast -a %s %s > /dev/null' % (
+      exec_cmd( 'adb -s %s shell am broadcast -a %s %s > /dev/null' % (
         self.adb_name, broadcast_signal, arguments) )
 
       """Loop to wait for results"""
@@ -63,7 +50,7 @@ class Android:
 
         try:
           """Return the number of lines in the file"""
-          output = self.exec_cmd( "wc -l %s/%s | cut -f1 -d' '" % (
+          output = exec_cmd( "wc -l %s/%s | cut -f1 -d' '" % (
             self.out_dir, self.container_name), pipe=True )
 
           """If the number of lines is equal to the current_interaction
@@ -79,8 +66,8 @@ class Android:
     print( 'Executions for device %s are finished!' % self.container_name )
 
   def get_results(self):
-    output = self.exec_cmd( 'adb -s %s shell logcat -d | grep DebugRpc > %s/%s' % (
+    output = exec_cmd( 'adb -s %s shell logcat -d | grep DebugRpc > %s/%s' % (
       self.adb_name, self.out_dir, self.container_name ), pipe=True )
     
-    self.exec_cmd( 'echo %s > %s/%s' % (
+    exec_cmd( 'echo %s > %s/%s' % (
       output, self.out_dir, self.container_name), True )

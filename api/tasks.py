@@ -58,3 +58,20 @@ class ExecTest(Resource):
 
     except:
       pass
+
+
+class StopScenario(Resource):
+  def get(self):
+    exec_cmd( 'mn -c' )
+
+    return send_res( 200, 'Finished scenario execution' )
+
+
+class GetVNCPort(Resource):
+  def get(self, cntr_name):
+    try:
+      vnc_port = get_vnc(cntr_name)
+
+      return send_res( 200, vnc_port )
+    except ContainerNotFoundException:
+      return send_res( 400, f'Container with name {cntr_name} not found.' )

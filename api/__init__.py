@@ -9,7 +9,9 @@ routes = [
   { 'resource': GetStatus, 'path': '/status' },
   { 'resource': HandleCreation, 'path': '/create' },
   { 'resource': SaveScenario, 'path': '/save' },
-  { 'resource': ExecTest, 'path': '/exec' }
+  { 'resource': ExecTest, 'path': '/exec' },
+  { 'resource': GetVNCPort, 'path': '/vnc/<string:cntr_name>' },
+  { 'resource': StopScenario, 'path': '/stop' }
 ]
 
 for route in routes:
