@@ -1,7 +1,7 @@
 FROM renanalves/containernet-androidtestbed
 LABEL maintainer="renan.alves@alu.ufc.br"
 
-RUN pip3 install flask-restful==0.3.8 pymongo
+RUN pip3 install flask-restful==0.3.8 flask-cors==3.0.9 pymongo
 
 RUN apt-get update && \
   apt-get install -y adb
