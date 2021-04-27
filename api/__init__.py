@@ -11,6 +11,8 @@ routes = [
   { 'resource': SaveScenario, 'path': '/save' },
   { 'resource': ExecTest, 'path': '/exec' },
   { 'resource': GetVNCPort, 'path': '/vnc/<string:cntr_name>' },
+  # { 'resource': GetVNCLink, 'path': '/vnc-link/<string:cntr_name>' },
+  { 'resource': SendAPK, 'path': '/send-apk/<string:apk_name>' },
   { 'resource': StopScenario, 'path': '/stop' }
 ]
 

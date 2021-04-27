@@ -1,7 +1,12 @@
+import os
+import werkzeug
 import logging as log
+from threading import Thread
+
 
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
+from requests.sessions import REDIRECT_STATI
 
 from testbed.scnerio_creator import ScenarioCreator
 from android_controller.device_controller import DeviceController
@@ -9,6 +14,9 @@ from resources.utils import *
 
 
 sc = ScenarioCreator()
+
+parser = reqparse.RequestParser()
+parser.add_argument('file',type=werkzeug.datastructures.FileStorage, location='files')
 
 
 class HandleCreation(Resource):
@@ -70,8 +78,34 @@ class StopScenario(Resource):
 class GetVNCPort(Resource):
   def get(self, cntr_name):
     try:
-      vnc_port = get_vnc(cntr_name)
+      vnc_port = get_vnc_port(cntr_name)
+      start_novnc( cntr_name, vnc_port )
 
       return send_res( 200, vnc_port )
     except ContainerNotFoundException:
       return send_res( 400, f'Container with name {cntr_name} not found.' )
+
+
+# class GetVNCLink(Resource):
+#   def get(self, cntr_name):
+#     try:
+#       vnc_port = get_vnc_port(cntr_name)
+
+#       exec_cmd('/usr/share/novnc/utils/launch.sh', background=True)
+
+#       return send_res( 200, BASE_VNC_URL.format(hostname, vnc_port) )
+#     except ContainerNotFoundException:
+#       return send_res( 400, f'Container with name {cntr_name} not found.' )
+
+
+class SendAPK(Resource):
+  def post(self, apk_name):
+    data = parser.parse_args()
+
+    if data['file'] == '':
+      return send_res( 200, 'No file found')
+    
+    apk = data['file']
+    apk.save( os.path.join(APKS_FOLDER,apk_name) )
+    
+    return send_res( 200, 'Apk {apk_name} uploaded.' )
