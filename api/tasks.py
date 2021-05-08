@@ -1,35 +1,30 @@
 import os
+from time import sleep
 import werkzeug
-import logging as log
-from threading import Thread
-
 
 from flask import request
 from flask_restful import Resource, reqparse
-from requests.sessions import REDIRECT_STATI
 
 from testbed.scnerio_creator import ScenarioCreator
 from android_controller.device_controller import DeviceController
 from resources.utils import *
 
 
-sc = ScenarioCreator()
+TESTBED_CLIENT = ScenarioCreator()
 
 parser = reqparse.RequestParser()
 parser.add_argument('file',type=werkzeug.datastructures.FileStorage, location='files')
 
 
 class HandleCreation(Resource):
-  def post(self):
-    log.debug('Received POST request')
-    
+  def post(self): 
     args = request.get_json()
     try:
-      sc.create_scenario( args )
-      sc.run_scenario()
+      TESTBED_CLIENT.create_scenario( args )
+      TESTBED_CLIENT.run_scenario()
       
       return send_res( 200, 'Scenario created.' )
-    except:
+    except Exception as e:
       return send_res( 400, 'Error creating scenario.' )
 
 
@@ -45,26 +40,36 @@ class SaveScenario(Resource):
 
 class ExecTest(Resource):
   def post(self):
-    log.debug( 'Received POST request' )
-    
     args = request.get_json()
+
     try:
-      controller = DeviceController()
-      devices = controller.connect_to_devices()
+      controller = DeviceController( args['log_tag'] )
+      controller.connect_to_devices()
+
+      devices = controller.get_devices()
   
       for device in devices:
-        controller.install_app( device, args['app_name'] )
-
-      for device in self.devices:
+        print( device.adb_name )
+        controller.install_app( device.adb_name, f"{APKS_FOLDER}/{args['app_name']}" )
+        
+      for device in devices:
         controller.start_app( device, args['main_activity'] )
+        sleep(4)
 
         if 'run_activity' in args.keys():
-          controller.exec_activity( device, args['extra_activity'], args['extras'] )
+          controller.exec_activity( device, args['run_activity'], args['extras'] )
       
       for device in devices:
         controller.start_test( device, args['broadcast_signal'], args['arguments'], args['interactions'] )
-
+      
+      return send_res( 200, 'Test execution in progress.' )
     except:
+      """
+        TODO: catch the exceptions
+          -> apk not found
+          -> wrong JSON format
+          -> some device connection erros
+      """
       pass
 
 
@@ -86,18 +91,6 @@ class GetVNCPort(Resource):
       return send_res( 400, f'Container with name {cntr_name} not found.' )
 
 
-# class GetVNCLink(Resource):
-#   def get(self, cntr_name):
-#     try:
-#       vnc_port = get_vnc_port(cntr_name)
-
-#       exec_cmd('/usr/share/novnc/utils/launch.sh', background=True)
-
-#       return send_res( 200, BASE_VNC_URL.format(hostname, vnc_port) )
-#     except ContainerNotFoundException:
-#       return send_res( 400, f'Container with name {cntr_name} not found.' )
-
-
 class SendAPK(Resource):
   def post(self, apk_name):
     data = parser.parse_args()
@@ -108,4 +101,4 @@ class SendAPK(Resource):
     apk = data['file']
     apk.save( os.path.join(APKS_FOLDER,apk_name) )
     
-    return send_res( 200, 'Apk {apk_name} uploaded.' )
+    return send_res( 200, f'Apk {apk_name} uploaded.' )

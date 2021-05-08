@@ -3,7 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 
 
-log.basicConfig(level="DEBUG")
+log.basicConfig(level="INFO")
 
 appInstance = Flask( __name__ )
 CORS(appInstance)

@@ -17,7 +17,7 @@ docker pull 'ubuntu:xenial'
 
 echo 'Pulling the "renanalves/server-testbed" and "renanalves/android-22" testbed images...'
 docker pull 'renanalves/server-testbed:latest'
-docker pull 'renanalves/android-22:vnc'
+docker pull 'renanalves/android-22'
 set -e
 
 echo "Welcome to Containernet running within a Docker container ..."

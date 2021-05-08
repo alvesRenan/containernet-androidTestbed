@@ -1,0 +1,10 @@
+{
+  "app_name": "sample_app.apk",
+  "log_tag": "DebugRpc",
+  "main_activity": "com.example.renan.kotlinmpos/.MainActivity",
+  "run_activity": "com.example.renan.kotlinmpos/.MainActivity",
+  "extras": "--es cloudlet 172.168.1.12",
+  "broadcast_signal": "com.example.renan.kotlinmpos.EXTRAS",
+  "arguments": "--es 'operation' 'mul' --ei 'size' 100",
+  "interactions": 2
+}

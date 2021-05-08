@@ -19,6 +19,8 @@ LAUNCH_NOVNC = '/usr/share/novnc/utils/launch.sh --vnc 0.0.0.0:5902 --listen 608
 
 DOCKER_CLIENT = docker.APIClient()
 
+TESTBED_NETWORK_ID = DOCKER_CLIENT.networks(filters={'name': 'testbed'})[0].get('Id')
+
 
 def send_res(code: int, message: str) -> dict:
   return { 'code': code, 'message': message }
@@ -73,3 +75,6 @@ def start_novnc(cntr_name, vnc_port):
     DOCKER_CLIENT.exec_start( exec_id.get('Id'), detach=True )
   except:
     pass
+
+def connect_cntr_to_network(cntr_name):
+  DOCKER_CLIENT.connect_container_to_network( f'mn.{cntr_name}', TESTBED_NETWORK_ID )

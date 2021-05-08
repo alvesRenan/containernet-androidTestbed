@@ -1,4 +1,3 @@
-from os import stat
 import shlex as sh
 import subprocess as sp
 
@@ -9,16 +8,13 @@ from android_controller.android_utils import Android
 
 class DeviceController:
 
-  def __init__(self, out_dir=None):
+  def __init__(self, log_tag):
     """
       Args:
-        out_dir (str): directory where the log files will be dumped
+        log_tag (str): tag used to get search for results in the device log
     """
     self.containers = []
-    self.out_dir = out_dir
-
-    "Create out_dir"
-    if out_dir is not None: sp.call( ['mkdir', self.out_dir] )
+    self.log_tag = log_tag
 
   def connect_to_devices(self):
     """
@@ -37,9 +33,9 @@ class DeviceController:
     )
 
     "Loop through the dicts"
-    for container_info in mn_containers:
+    for cntr_info in mn_containers:
       "Split retuns: '/' + 'conainer_name'"
-      _, name = container_info.get('Names')[0].split('/')
+      _, name = cntr_info.get('Names')[0].split('/')
        
       """If container exposes port 5555, then host_port is a list
          with a dict containing the keys 'HostIp' and 'HostPort'"""
@@ -49,15 +45,14 @@ class DeviceController:
          is not running a emulator"""
       if host_port != None:
         "Dict with 'HostIp' and 'HostPort' of a given container"
-        d = host_port[0]
-
-        adb_name = "%s:%s" % ( d.get('HostIp'), d.get('HostPort') )
+        cntr_ip = cntr_info.get('NetworkSettings').get('Networks').get('containernet-androidtestbed_testbed').get('IPAddress')
+        adb_name = f"{cntr_ip}:5555"
         
         "Add to use on the get_devices method"
         self.containers.append( (name, adb_name) )
 
         "Mount the correct 'adb connect' command"
-        cmd = "adb connect %s" % adb_name 
+        cmd = f"adb connect {adb_name}"
 
         "Exec the shell command"
         sp.call( sh.split(cmd) )
@@ -73,7 +68,7 @@ class DeviceController:
     devices = []
 
     for name, adb_name in self.containers:
-      android_device = Android(name, adb_name, self.out_dir)
+      android_device = Android(name, adb_name, self.log_tag)
       devices.append(android_device)
     
     return devices
@@ -106,7 +101,6 @@ class DeviceController:
     """
 
     android_obj.start_app (activity )
-    print( "Stated activity %s on device %s" % (activity, android_obj.container_name) )
   
   @staticmethod
   def exec_activity(android_obj, activity, extras):
@@ -121,10 +115,9 @@ class DeviceController:
         Prints the name of the container where the app was started
     """
     android_obj.run_activity( activity, extras )
-    print( "Stated activity %s on device %s" % (activity, android_obj.container_name) )
 
   @staticmethod
-  def start_test(android_obj, broadcast_signal, arguments, num_repetitions, random_time=False):
+  def start_test(android_obj, broadcast_signal, arguments, num_repetitions):
     """
       Starts a Thread for the Android object and keep sending the broadcast_signal until num_repetitions is hit
 
@@ -135,7 +128,5 @@ class DeviceController:
                                 be executed
         arguments (str): Arguments to be passed to the activity via Intent
         num_repetitions (int): Number of times the activity will be execcuted
-        random_time (bool): Defines if the emulators will wait a random time 
-                            before starting the activity
     """
-    android_obj.run(broadcast_signal, arguments, num_repetitions, random_time)
+    android_obj.run(broadcast_signal, arguments, num_repetitions)

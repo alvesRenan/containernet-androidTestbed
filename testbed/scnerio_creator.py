@@ -53,6 +53,7 @@ class ScenarioCreator:
       node.get('name'),
       ip=node.get('ip'),
       dimage=node.get('dimage') )
+    connect_cntr_to_network( node.get('name') )
     
     self.nodes[node.get('interface')] = self.net.addSwitch( node.get('interface') )
 

@@ -1,7 +1,8 @@
 FROM renanalves/containernet-androidtestbed
 LABEL maintainer="renan.alves@alu.ufc.br"
 
-RUN pip3 install flask-restful==0.3.8 flask-cors==3.0.9 pymongo
+COPY requiriments.txt /containernet/requiriments.txt
+RUN pip3 install -r /containernet/requiriments.txt
 
 RUN apt-get update && \
   apt-get install -y adb
