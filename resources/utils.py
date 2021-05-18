@@ -2,6 +2,7 @@ import docker
 import subprocess as sp
 import shlex as sh
 
+from .mongo_manager import MongoManager
 
 class ContainerNotFoundException(Exception):
   pass
@@ -20,6 +21,8 @@ LAUNCH_NOVNC = '/usr/share/novnc/utils/launch.sh --vnc 0.0.0.0:5902 --listen 608
 DOCKER_CLIENT = docker.APIClient()
 
 TESTBED_NETWORK_ID = DOCKER_CLIENT.networks(filters={'name': 'testbed'})[0].get('Id')
+
+MONGO_MANAGER = MongoManager()
 
 
 def send_res(code: int, message: str) -> dict:

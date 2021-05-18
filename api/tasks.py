@@ -33,11 +33,6 @@ class GetStatus(Resource):
     return send_res( 200, 'Running.' )
 
 
-class SaveScenario(Resource):
-  def post(self):
-    pass
-
-
 class ExecTest(Resource):
   def post(self):
     args = request.get_json()
@@ -102,3 +97,17 @@ class SendAPK(Resource):
     apk.save( os.path.join(APKS_FOLDER,apk_name) )
     
     return send_res( 200, f'Apk {apk_name} uploaded.' )
+
+
+class ManageScenarios(Resource):
+  def get(self, scenario_name):
+    data = MONGO_MANAGER.get_scenario(scenario_name)
+
+    return send_res( 200, data )
+  
+  def post(self, scenario_name):
+    scenario_info = request.get_json()
+
+    info_msg = MONGO_MANAGER.save_scenario( scenario_name, scenario_info )
+
+    return send_res( 200, info_msg )

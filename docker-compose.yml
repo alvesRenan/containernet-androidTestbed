@@ -22,5 +22,7 @@ services:
   ### MongoDB ######################################
   mongodb:
     image: mongo
+    volumes: 
+      - ./mongo-data:/data/db
     networks: 
       - testbed
