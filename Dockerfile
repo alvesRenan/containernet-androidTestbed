@@ -20,6 +20,8 @@ COPY testbed /containernet/testbed
 COPY resources /containernet/resources
 COPY android_controller /containernet/android_controller
 
+RUN mkdir /containernet/apks
+
 # COPY create_scenario_example.py /containernet/examples/android_testbed.py
 # COPY scenario_example.json /containernet/examples/scenario_example.json
 

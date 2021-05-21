@@ -86,23 +86,33 @@ class GetVNCPort(Resource):
       return send_res( 400, f'Container with name {cntr_name} not found.' )
 
 
-class SendAPK(Resource):
-  def post(self, apk_name):
+class ManageAPKs(Resource):
+  def get(self, name):
+    if name == 'list':
+      return send_res( 200, list_apks(), customize_msg=True, msg_name='apks' )
+    
+    return send_res( 404, 'Not Found' )
+
+  def post(self, name):
     data = parser.parse_args()
 
     if data['file'] == '':
       return send_res( 200, 'No file found')
     
     apk = data['file']
-    apk.save( os.path.join(APKS_FOLDER,apk_name) )
+    apk.save( os.path.join(APKS_FOLDER,name) )
     
-    return send_res( 200, f'Apk {apk_name} uploaded.' )
+    return send_res( 200, f'Apk {name} uploaded.' )
 
 
 class ManageScenarios(Resource):
   def get(self, scenario_name):
-    data = MONGO_MANAGER.get_scenario(scenario_name)
+    if scenario_name == 'list':
+      data = MONGO_MANAGER.get_scenario( list_all=True )
 
+      return send_res( 200, data, customize_msg=True, msg_name='scenarios' )
+
+    data = MONGO_MANAGER.get_scenario( scenario_name )
     return send_res( 200, data )
   
   def post(self, scenario_name):

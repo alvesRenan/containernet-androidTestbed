@@ -21,7 +21,14 @@ class MongoManager:
     
     return True
   
-  def get_scenario(self, scenario_name):
+  def get_scenario(self, scenario_name=None, list_all=False):
+    if list_all:
+      scenarios = []
+      for i in self.db.saved_scenarios.find({}, { '_id': False }):
+        scenarios.append( i )
+      
+      return scenarios
+
     if self._scenario_exists(scenario_name):
       data = self.db.saved_scenarios.find_one({ 'name': scenario_name })
 

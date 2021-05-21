@@ -1,3 +1,4 @@
+from os import listdir
 import docker
 import subprocess as sp
 import shlex as sh
@@ -25,10 +26,13 @@ TESTBED_NETWORK_ID = DOCKER_CLIENT.networks(filters={'name': 'testbed'})[0].get(
 MONGO_MANAGER = MongoManager()
 
 
-def send_res(code: int, message: str) -> dict:
+def send_res(code, message, customize_msg=False, msg_name='' ):
+  if customize_msg:
+    return { 'code': code, msg_name: message }
+  
   return { 'code': code, 'message': message }
 
-def get_vnc_port(cntr_name: str) -> str:
+def get_vnc_port(cntr_name):
   """
     Args:
       cntr_name: container name
@@ -81,3 +85,6 @@ def start_novnc(cntr_name, vnc_port):
 
 def connect_cntr_to_network(cntr_name):
   DOCKER_CLIENT.connect_container_to_network( f'mn.{cntr_name}', TESTBED_NETWORK_ID )
+
+def list_apks():
+  return listdir( APKS_FOLDER )
