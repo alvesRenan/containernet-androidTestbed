@@ -5,8 +5,8 @@
   ],
   "SWITCHES": [ "s1", "s2"],
   "LINKS": [
-    { "from": "if1", "to": "s1", "delay": "100ms", "bw": 1 },
-    { "from": "s1", "to": "s2", "delay": "100ms", "bw": 5 },
-    { "from": "ifserv1", "to": "s2", "delay": "100ms", "bw": 10 }
+    { "from": "if1", "to": "s1", "delay": "10ms", "bw": 1 },
+    { "from": "s1", "to": "s2", "delay": "10ms", "bw": 5 },
+    { "from": "ifserv1", "to": "s2", "delay": "1ms", "bw": 10 }
   ]
 }

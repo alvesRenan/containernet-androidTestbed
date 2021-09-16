@@ -38,6 +38,8 @@ class ExecTest(Resource):
     args = request.get_json()
 
     try:
+      os.environ['TESTBED_TEST_STATUS'] = 'EXECUTING'
+
       controller = DeviceController( args['log_tag'] )
       controller.connect_to_devices()
 
@@ -57,15 +59,35 @@ class ExecTest(Resource):
       for device in devices:
         controller.start_test( device, args['broadcast_signal'], args['arguments'], args['interactions'] )
       
+      start_execution_observer( len(devices), args['interactions'] )
+
       return send_res( 200, 'Test execution in progress.' )
-    except:
+    except Exception as e:
+      os.environ['TESTBED_TEST_STATUS'] = 'ERROR_ON_LAST_EXEC'
+
       """
         TODO: catch the exceptions
-          -> apk not found
-          -> wrong JSON format
           -> some device connection erros
       """
       pass
+
+
+class TestStatus(Resource):
+  def get(self):
+    status = os.getenv('TESTBED_TEST_STATUS')
+
+    """if no status is available then set it to 'NOT_EXECUTING'"""
+    if status is None:
+      status = 'NOT_EXECUTING'
+    
+    """
+      possible responses:
+        -> NOT_EXECUTING
+        -> ERROR_ON_LAST_EXEC
+        -> EXECUTING
+        -> FINISHED
+    """
+    return send_res( 200, status )
 
 
 class StopScenario(Resource):
@@ -79,7 +101,7 @@ class GetVNCPort(Resource):
   def get(self, cntr_name):
     try:
       vnc_port = get_vnc_port(cntr_name)
-      start_novnc( cntr_name, vnc_port )
+      start_novnc( cntr_name )
 
       return send_res( 200, vnc_port )
     except ContainerNotFoundException:
@@ -121,3 +143,15 @@ class ManageScenarios(Resource):
     info_msg = MONGO_MANAGER.save_scenario( scenario_name, scenario_info )
 
     return send_res( 200, info_msg )
+
+
+class GetExecutionLogs(Resource):
+  def get(self):
+    return send_res( 200, MONGO_MANAGER.get_all_executions(), customize_msg=True, msg_name='execution_log' )
+
+
+class CleanExecutionLogs(Resource):
+  def get(self):
+    MONGO_MANAGER.clean_last_execution_log()
+
+    return send_res( 200, 'Logs deleted.' )

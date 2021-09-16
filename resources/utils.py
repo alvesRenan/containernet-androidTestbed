@@ -1,9 +1,12 @@
-from os import listdir
-import docker
-import subprocess as sp
 import shlex as sh
+import subprocess as sp
+from os import listdir, environ
+from threading import Thread
+
+import docker
 
 from .mongo_manager import MongoManager
+
 
 class ContainerNotFoundException(Exception):
   pass
@@ -75,7 +78,7 @@ def exec_cmd(cmd, output=False, pipe=False, background=False):
 
   sp.call( cmd )
 
-def start_novnc(cntr_name, vnc_port):
+def start_novnc(cntr_name):
   exec_id = DOCKER_CLIENT.exec_create( f'mn.{cntr_name}', LAUNCH_NOVNC )
 
   try:
@@ -88,3 +91,23 @@ def connect_cntr_to_network(cntr_name):
 
 def list_apks():
   return listdir( APKS_FOLDER )
+
+def start_execution_observer(devices_qtd, interactions):
+  """
+    Starts a thread to keepp cheking if the qtd of lines in mongo is 
+    greater than the value of (devices_qtd * interactions)
+  """
+
+  def observer_task(num_expected_results):
+    while True:
+      current_results = MONGO_MANAGER.get_all_executions()
+
+      if len(current_results) == num_expected_results:
+        environ['TESTBED_TEST_STATUS'] = 'FINISHED'  
+        break
+
+  num_expected_results = devices_qtd * interactions
+  Thread( target=observer_task, args=(num_expected_results,) ).start()
+    
+
+
