@@ -1,4 +1,3 @@
-# FROM renanalves/containernet-androidtestbed
 FROM renanalves/containernet
 LABEL maintainer="renan.alves@alu.ufc.br"
 
@@ -12,8 +11,6 @@ RUN apt-get update && \
 
 COPY entrypoint.sh util/docker/entrypoint.sh
 
-# COPY README.md /containernet/testbed/README.md
-
 COPY app.py /containernet/app.py
 COPY api /containernet/api
 COPY testbed /containernet/testbed
@@ -21,9 +18,6 @@ COPY resources /containernet/resources
 COPY android_controller /containernet/android_controller
 
 RUN mkdir /containernet/apks
-
-# COPY create_scenario_example.py /containernet/examples/android_testbed.py
-# COPY scenario_example.json /containernet/examples/scenario_example.json
 
 EXPOSE 5000
 

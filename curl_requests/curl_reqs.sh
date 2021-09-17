@@ -8,7 +8,7 @@ case $1 in
     curl -X GET http://localhost:5000/stop
     ;;
   3|send-apk)
-    curl -X POST -F file=@'../sample_app.apk' http://localhost:5000/apks/sample_app.apk
+    curl -X POST -F file=@'sample_app.apk' http://localhost:5000/apks/sample_app.apk
     ;;
   4|exec-test)
     curl -X POST -H "Content-Type: application/json" http://localhost:5000/exec -d @test_exec.json

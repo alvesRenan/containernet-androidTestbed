@@ -5,12 +5,12 @@ function default_init() {
 }
 
 function build() {
-	docker build -t renanalves/containernet-androidtestbed .
+	docker build -t renanalves/containernet-androidtestbed ./app
 }
 
 function build_test() {
 	docker rmi renanalves/containernet-androidtestbed:test
-	docker build -t renanalves/containernet-androidtestbed:test .
+	docker build -t renanalves/containernet-androidtestbed:test ./app
 }
 
 function kill_compose() {
