@@ -1,5 +1,6 @@
 from threading import Thread
 from time import sleep
+from datetime import datetime
 
 import pymongo
 from resources.utils import exec_cmd
@@ -74,4 +75,5 @@ class Android:
 
       if last_log_line != last_saved_log.get('log') and last_log_line != '':
         """save on mongodb"""
-        self.db.execution_log.insert_one({ 'device_name': self.device_name, 'log': last_log_line, 'execution_number': current_interation })
+        timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        self.db.execution_log.insert_one({ 'device_name': self.device_name, 'log': last_log_line, 'execution_number': current_interation, 'timestamp': timestamp })
