@@ -16,7 +16,7 @@ case $1 in
   5|all)
     curl -X GET http://localhost:5000/stop
     curl -X POST -H "Content-Type: application/json" http://localhost:5000/create -d @scenario_example.json
-    curl -X POST -F file=@'../sample_app.apk' http://localhost:5000/apks/sample_app.apk
+    curl -X POST -F file=@'sample_app.apk' http://localhost:5000/apks/sample_app.apk
     sleep 15
     curl -X POST -H "Content-Type: application/json" http://localhost:5000/exec -d @test_exec.json
     ;;
