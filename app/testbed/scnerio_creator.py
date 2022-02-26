@@ -17,6 +17,7 @@ class ScenarioCreator:
 
     self.nodes = {}
     self.types = {}
+    self.server_ips = ''
 
   def create_scenario(self, scenario_info):
     self.add_controller()
@@ -59,6 +60,9 @@ class ScenarioCreator:
 
     self.types[node.get('name')] = node.get('type')
 
+    if node.get('type') == 'server':
+      self.server_ips += ' %s' % node.get("ip")
+
     self.container_to_interface( node.get('name'), node.get('interface') )
 
   def container_to_interface(self, node, interface):
@@ -84,9 +88,11 @@ class ScenarioCreator:
       
       if self.types.get( key ) == "server":
         node.cmd( MPOS_START )
-      else:
+      elif self.types.get( key ) == "client":
         node.cmd( FORWARD_PORTS )
         node.cmd( ANDROID_EMU_START )
+      elif self.types.get( key ) == "load-balance":
+        node.cmd( "python3 /home/start.py '%s' &" % self.server_ips )
 
     self.net.start()
     CLI(self.net)

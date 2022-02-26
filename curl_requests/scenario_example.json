@@ -1,12 +1,16 @@
 {
   "NODES": [
-    { "name": "c1", "ip": "172.168.1.10", "dimage": "renanalves/android-22", "interface": "if1", "type": "client" },
-    { "name": "serv1", "ip": "172.168.1.12", "dimage": "renanalves/server-testbed", "interface": "ifserv1", "type": "server" }
+    { "name": "c1", "ip": "10.0.0.10", "dimage": "renanalves/android-22", "interface": "if1", "type": "client" },
+    { "name": "lb1", "ip": "10.0.0.11", "dimage": "renanalves/nginx-lb", "interface": "iflb1", "type": "load-balance" },
+    { "name": "serv1", "ip": "10.0.0.12", "dimage": "renanalves/server-testbed", "interface": "ifserv1", "type": "server" },
+    { "name": "serv2", "ip": "10.0.0.13", "dimage": "renanalves/server-testbed", "interface": "ifserv2", "type": "server" }
   ],
   "SWITCHES": [ "s1", "s2"],
   "LINKS": [
     { "from": "if1", "to": "s1", "delay": "10ms", "bw": 1 },
     { "from": "s1", "to": "s2", "delay": "10ms", "bw": 5 },
-    { "from": "ifserv1", "to": "s2", "delay": "1ms", "bw": 10 }
+    { "from": "iflb1", "to": "s2", "delay": "1ms", "bw": 10 },
+    { "from": "ifserv1", "to": "iflb1", "delay": "1ms", "bw": 10 },
+    { "from": "ifserv2", "to": "iflb1", "delay": "1ms", "bw": 10 }
   ]
 }

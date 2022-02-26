@@ -7,7 +7,7 @@ networks:
 services:
   ### containernet-testbed #########################
   testbed:
-    image: renanalves/containernet-androidtestbed
+    image: renanalves/containernet-androidtestbed:test-lb
     pid: 'host'
     privileged: true
     volumes:
