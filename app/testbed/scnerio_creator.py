@@ -81,7 +81,7 @@ class ScenarioCreator:
     f = link.get('from')
     t = link.get('to')
 
-    self.net.addLink( self.nodes.get(f), self.nodes.get(t), cls=TCLink, delay=link.get('delay'), bw=link.get('bw') )
+    self.net.addLink( self.nodes.get(f), self.nodes.get(t), cls=TCLink, delay=link.get('delay'), bw=link.get('bw'), jitter=link.get('jitter', None) )
 
   def run_scenario(self):
     for key, node in self.nodes.items():

@@ -24,7 +24,10 @@ LAUNCH_NOVNC = '/usr/share/novnc/utils/launch.sh --vnc 0.0.0.0:5902 --listen 608
 
 DOCKER_CLIENT = docker.APIClient()
 
+# Network Id
 TESTBED_NETWORK_ID = DOCKER_CLIENT.networks(filters={'name': 'testbed'})[0].get('Id')
+# Network full name
+TESTBED_NETWORK_NAME = DOCKER_CLIENT.networks(filters={'name': 'testbed'})[0].get('Name')
 
 MONGO_MANAGER = MongoManager()
 

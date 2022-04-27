@@ -4,6 +4,7 @@ import subprocess as sp
 import docker
 
 from android_controller.android_utils import Android
+from resources.utils import TESTBED_NETWORK_NAME
 
 
 class DeviceController:
@@ -45,7 +46,7 @@ class DeviceController:
          is not running a emulator"""
       if host_port != None:
         "Dict with 'HostIp' and 'HostPort' of a given container"
-        cntr_ip = cntr_info.get('NetworkSettings').get('Networks').get('containernet-androidtestbed_testbed').get('IPAddress')
+        cntr_ip = cntr_info.get('NetworkSettings').get('Networks').get(TESTBED_NETWORK_NAME).get('IPAddress')
         adb_name = f"{cntr_ip}:5555"
         
         "Add to use on the get_devices method"
