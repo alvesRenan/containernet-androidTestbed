@@ -93,6 +93,7 @@ class ScenarioCreator:
         node.cmd( ANDROID_EMU_START )
       elif self.types.get( key ) == "load-balance":
         node.cmd( "python3 /home/start.py '%s' &" % self.server_ips )
+        self.server_ips = ''
 
     self.net.start()
     CLI(self.net)
