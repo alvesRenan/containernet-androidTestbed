@@ -61,7 +61,12 @@ class ScenarioCreator:
     self.types[node.get('name')] = node.get('type')
 
     if node.get('type') == 'server':
+      # adds the server ip to a list that will be used by the loadbalancer later
       self.server_ips += ' %s' % node.get("ip")
+
+      # if set by the user, limits the amount of cpus the container can use
+      if node.get('cpus') is not None:
+        update_cntr_cpus( node.get('name'), node.get('cpus') )
 
     self.container_to_interface( node.get('name'), node.get('interface') )
 
