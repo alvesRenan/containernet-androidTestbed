@@ -65,7 +65,7 @@ def get_vnc_port(cntr_name):
       "if is VNC port then return the value of 'PublicPort'"
       return str( info.get('PublicPort') )
 
-def exec_cmd(cmd, output=False, pipe=False, shell=False):
+def exec_cmd(cmd, output=False, pipe=False):
   if pipe:
     ps = sp.Popen( cmd, shell=True, stdout=sp.PIPE, stderr=sp.STDOUT )
     return ps.communicate()[0]
@@ -74,10 +74,6 @@ def exec_cmd(cmd, output=False, pipe=False, shell=False):
 
   if output:
     return sp.getoutput( cmd )
-  
-  if shell:
-    sp.call( cmd, shell=True, stderr=sp.DEVNULL, stdout=sp.DEVNULL )
-    return
 
   sp.call( cmd )
 
@@ -113,5 +109,4 @@ def start_execution_observer(devices_qtd, interactions):
   Thread( target=observer_task, args=(num_expected_results,) ).start()
     
 def update_cntr_cpus(cntr_name, qtd_cpus):
-  exec_cmd( f'docker update --cpus={qtd_cpus} mn.{cntr_name}', shell=True )
-
+  sp.call( f'docker update --cpus={qtd_cpus} mn.{cntr_name}', shell=True, stderr=sp.DEVNULL, stdout=sp.DEVNULL )
