@@ -1,5 +1,5 @@
 # FROM renanalves/containernet
-FROM renanalves/containernet-androidtestbed:test
+FROM renanalves/containernet-androidtestbed
 # LABEL maintainer="renan.alves@alu.ufc.br"
 
 # COPY requiriments.txt /containernet/requiriments.txt

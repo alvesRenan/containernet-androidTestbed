@@ -14,5 +14,6 @@
     { "from": "iflb1", "to": "s2", "delay": "1ms", "bw": 10 },
     { "from": "ifserv1", "to": "iflb1", "delay": "1ms", "bw": 10 },
     { "from": "ifserv2", "to": "iflb1", "delay": "1ms", "bw": 10 }
-  ]
+  ],
+  "REMOTE_SERVERS": ["192.168.100.39"]
 }

@@ -27,6 +27,12 @@ class ScenarioCreator:
     switches = scenario_info.get( 'SWITCHES', [] )
     links = scenario_info.get( 'LINKS', [] )
 
+    # TODO: reafactor this later
+    # for now just try to read the list "REMOTE_SERVERS" from the JSON and add to the string
+    for ip in scenario_info.get( 'REMOTE_SERVERS', [] ):
+      self.server_ips += ' %s' % ip
+    # # #
+
     for node in nodes:
       self.create_docker_node( node )
 
