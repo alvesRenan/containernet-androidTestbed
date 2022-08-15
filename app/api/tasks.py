@@ -87,7 +87,13 @@ class TestStatus(Resource):
         -> EXECUTING
         -> FINISHED
     """
-    return send_res( 200, status )
+
+    test_info = {
+      "status": status,
+      "current_client_execution": MONGO_MANAGER.get_clients_current_execution()
+    }
+
+    return send_res( 200, test_info )
 
 
 class StopScenario(Resource):

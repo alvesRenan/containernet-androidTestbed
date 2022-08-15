@@ -46,3 +46,22 @@ class MongoManager:
   
   def clean_last_execution_log(self):
     self.executions.execution_log.drop()
+  
+  def get_clients_current_execution(self):
+    pipeline = [
+      { 
+        "$group": {
+          "_id": "$device_name",
+          "max_exec": { "$max": "$execution_number" }
+        }
+      },
+      { 
+        "$project": {
+          "device": "$_id",
+          "current_interaction": "$max_exec",
+          "_id": 0
+        }
+      }
+    ]
+
+    return list( self.executions.execution_log.aggregate(pipeline) )
