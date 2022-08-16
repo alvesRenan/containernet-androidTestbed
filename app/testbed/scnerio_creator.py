@@ -110,6 +110,10 @@ class ScenarioCreator:
     CLI(self.net)
   
   def stop_scenario(self):
+    self.nodes = {}
+    self.types = {}
+    self.server_ips = ''
+    
     self.net.stop()
 
     sp.call( sh.split('mn -c') )

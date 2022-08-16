@@ -57,7 +57,8 @@ class ExecTest(Resource):
           controller.exec_activity( device, args['run_activity'], args['extras'] )
       
       for device in devices:
-        controller.start_test( device, args['broadcast_signal'], args['arguments'], args['interactions'] )
+        Thread( target=start_execution_task, args=(controller, device, args,) ).start()
+        # controller.start_test( device, args['broadcast_signal'], args['arguments'], args['interactions'] )
       
       start_execution_observer( len(devices), args['interactions'] )
 

@@ -1,6 +1,6 @@
 import shlex as sh
 import subprocess as sp
-from os import listdir, environ
+from os import environ, listdir
 from threading import Thread
 
 import docker
@@ -110,3 +110,6 @@ def start_execution_observer(devices_qtd, interactions):
     
 def update_cntr_cpus(cntr_name, qtd_cpus):
   sp.call( f'docker update --cpus={qtd_cpus} mn.{cntr_name}', shell=True, stderr=sp.DEVNULL, stdout=sp.DEVNULL )
+
+def start_execution_task(controller, device, args):
+    controller.start_test( device, args['broadcast_signal'], args['arguments'], args['interactions'] )
